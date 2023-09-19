@@ -10,9 +10,10 @@ public class Program
     private static void Main()
     {
         //GetAllRegions();
-        //int regionId = 1; GetRegionById(regionId);
+        //GetRegionById(1);
         //InsertRegion("Jawa Timur");
-        int regionId = 11; string newName = "Jawa Tengah"; UpdateRegion(regionId, newName);
+        //UpdateRegion(11, "Jawa Tengah");
+        DeleteRegion(11);
     }
 
     // GET ALL: Region
@@ -189,5 +190,42 @@ public class Program
     }
 
     // DELETE: Region
-    public static void DeleteRegion(int id) { }
+    public static void DeleteRegion(int id)
+    {
+        using var connection = new SqlConnection(connectionString);
+        using var command = new SqlCommand();
+
+        command.Connection = connection;
+        command.CommandText = "DELETE FROM tbl_regions WHERE Id = @id";
+
+        try
+        {
+            var pId = new SqlParameter
+            {
+                ParameterName = "@id",
+                Value = id,
+                SqlDbType = SqlDbType.Int
+            };
+            command.Parameters.Add(pId);
+
+            connection.Open();
+            var result = command.ExecuteNonQuery();
+
+            connection.Close();
+
+            switch (result)
+            {
+                case >= 1:
+                    Console.WriteLine("Delete Success");
+                    break;
+                default:
+                    Console.WriteLine("Delete Failed");
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
 }
