@@ -10,8 +10,9 @@ public class Program
     private static void Main()
     {
         //GetAllRegions();
-        int regionId = 1; GetRegionById(regionId);
+        //int regionId = 1; GetRegionById(regionId);
         //InsertRegion("Jawa Timur");
+        int regionId = 11; string newName = "Jawa Tengah"; UpdateRegion(regionId, newName);
     }
 
     // GET ALL: Region
@@ -140,7 +141,52 @@ public class Program
     }
 
     // UPDATE: Region
-    public static void UpdateRegion(int id, string name) { }
+    public static void UpdateRegion(int id, string name)
+    {
+        using var connection = new SqlConnection(connectionString);
+        using var command = new SqlCommand();
+
+        command.Connection = connection;
+        command.CommandText = "UPDATE tbl_regions SET Name = @name WHERE Id = @id";
+
+        try
+        {
+            var pId = new SqlParameter
+            {
+                ParameterName = "@id",
+                Value = id,
+                SqlDbType = SqlDbType.Int
+            };
+            command.Parameters.Add(pId);
+
+            var pName = new SqlParameter
+            {
+                ParameterName = "@name",
+                Value = name,
+                SqlDbType = SqlDbType.VarChar
+            };
+            command.Parameters.Add(pName);
+
+            connection.Open();
+            var result = command.ExecuteNonQuery();
+
+            connection.Close();
+
+            switch (result)
+            {
+                case >= 1:
+                    Console.WriteLine("Update Success");
+                    break;
+                default:
+                    Console.WriteLine("Update Failed");
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
 
     // DELETE: Region
     public static void DeleteRegion(int id) { }
