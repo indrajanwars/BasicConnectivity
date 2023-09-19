@@ -9,7 +9,8 @@ public class Program
         "Data Source=DESKTOP-MQGRL05;Integrated Security=True;Database=DB_HR;Connect Timeout=30;";
     private static void Main()
     {
-        GetAllRegions();
+        //GetAllRegions();
+        int regionId = 1; GetRegionById(regionId);
         //InsertRegion("Jawa Timur");
     }
 
@@ -47,7 +48,44 @@ public class Program
     }
 
     // GET BY ID: Region
-    public static void GetRegionById(int id) { }
+    public static void GetRegionById(int id)
+    {
+        using var connection = new SqlConnection(connectionString);
+        using var command = new SqlCommand();
+
+        command.Connection = connection;
+        command.CommandText = "SELECT * FROM tbl_regions WHERE Id = @id";
+
+        try
+        {
+            var pId = new SqlParameter
+            {
+                ParameterName = "@id",
+                Value = id,
+                SqlDbType = SqlDbType.Int
+            };
+            command.Parameters.Add(pId);
+
+            connection.Open();
+            using var reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+                while (reader.Read())
+                {
+                    Console.WriteLine("Id: " + reader.GetInt32(0));
+                    Console.WriteLine("Name: " + reader.GetString(1));
+                }
+            else
+                Console.WriteLine("No rows found.");
+
+            reader.Close();
+            connection.Close();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
 
     // INSERT: Region
     public static void InsertRegion(string name)
@@ -60,10 +98,12 @@ public class Program
 
         try
         {
-            var pName = new SqlParameter();
-            pName.ParameterName = "@name";
-            pName.Value = name;
-            pName.SqlDbType = SqlDbType.VarChar;
+            var pName = new SqlParameter
+            {
+                ParameterName = "@name",
+                Value = name,
+                SqlDbType = SqlDbType.VarChar
+            };
             command.Parameters.Add(pName);
 
             connection.Open();
