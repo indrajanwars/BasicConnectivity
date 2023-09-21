@@ -160,25 +160,33 @@ public class Program
                                    }).ToList();
 
                 var resultJoin4 = getEmployee1
-    .Join(getDepartment1,
-    e => e.DepartmentId, d => d.Id, (e, d) => new { Employee = e, Department = d })
-    .Join(getLocation1,
-    ed => ed.Department.LocationId, l => l.Id, (ed, l) => new { ed.Employee, ed.Department, Location = l })
-    .Join(getCountry1,
-    edl => edl.Location.CountryId, c => c.Id, (edl, c) => new { edl.Employee, edl.Department, edl.Location, Country = c })
-    .Join(getRegion1,
-    edlc => edlc.Country.RegionId, r => r.Id, (edlc, r) => new EmployeeData
-    {
-        Id = edlc.Employee.Id,
-        Full_Name = $"{edlc.Employee.FirstName} {edlc.Employee.LastName}",
-        Email = edlc.Employee.Email,
-        Phone = edlc.Employee.PhoneNumber,
-        Salary = edlc.Employee.Salary,
-        Department_Name = edlc.Department.Name,
-        Street_Address = edlc.Location.StreetAddress,
-        Country_Name = edlc.Country.Name,
-        Region_Name = r.Name
-    }).ToList();
+                                  .Join(getDepartment1,
+                                        e => e.DepartmentId,
+                                        d => d.Id,
+                                        (e, d) => new { Employee = e, Department = d })
+                                  .Join(getLocation1,
+                                        ed => ed.Department.LocationId,
+                                        l => l.Id,
+                                        (ed, l) => new { ed.Employee, ed.Department, Location = l })
+                                  .Join(getCountry1,
+                                        edl => edl.Location.CountryId,
+                                        c => c.Id,
+                                        (edl, c) => new { edl.Employee, edl.Department, edl.Location, Country = c })
+                                  .Join(getRegion1,
+                                        edlc => edlc.Country.RegionId,
+                                        r => r.Id,
+                                        (edlc, r) => new EmployeeData
+                                        {
+                                            Id = edlc.Employee.Id,
+                                            Full_Name = $"{edlc.Employee.FirstName} {edlc.Employee.LastName}",
+                                            Email = edlc.Employee.Email,
+                                            Phone = edlc.Employee.PhoneNumber,
+                                            Salary = edlc.Employee.Salary,
+                                            Department_Name = edlc.Department.Name,
+                                            Street_Address = edlc.Location.StreetAddress,
+                                            Country_Name = edlc.Country.Name,
+                                            Region_Name = r.Name
+                                        }).ToList();
 
                 GeneralMenu.List(resultJoin4, "Employee Details:\nID - Full Name - Email - Phone Number - Salary - Department Name - Street Address - Country Name - Region Name");
                 break;
