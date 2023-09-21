@@ -59,7 +59,7 @@ public class Region
         using var command = Provider.GetCommand();
 
         command.Connection = connection;
-        command.CommandText = "SELECT * FROM regions where id = @id";
+        command.CommandText = "SELECT * FROM tbl_regions where id = @id";
         command.Parameters.Add(Provider.SetParameter("@id", id));
 
         try
@@ -94,7 +94,7 @@ public class Region
         using var command = Provider.GetCommand();
 
         command.Connection = connection;
-        command.CommandText = "INSERT INTO regions VALUES (@name);";
+        command.CommandText = "INSERT INTO tbl_regions VALUES (@name);";
 
         try
         {
@@ -127,11 +127,76 @@ public class Region
 
     public string Update(Region tbl_regions)
     {
-        return "";
+        using var connection = Provider.GetConnection();
+        using var command = Provider.GetCommand();
+
+        command.Connection = connection;
+        command.CommandText = "UPDATE tbl_regions SET Name = @name WHERE Id = @id";
+
+        try
+        {
+            command.Parameters.Add(Provider.SetParameter("@id", tbl_regions.Id));
+            command.Parameters.Add(Provider.SetParameter("@name", tbl_regions.Name));
+
+            connection.Open();
+            using var transaction = connection.BeginTransaction();
+            try
+            {
+                command.Transaction = transaction;
+
+                var result = command.ExecuteNonQuery();
+
+                transaction.Commit();
+                connection.Close();
+
+                return result > 0 ? "Update Success" : "Update Failed";
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return $"Error Transaction: {ex.Message}";
+            }
+        }
+        catch (Exception ex)
+        {
+            return $"Error: {ex.Message}";
+        }
     }
 
     public string Delete(int id)
     {
-        return "";
+        using var connection = Provider.GetConnection();
+        using var command = Provider.GetCommand();
+
+        command.Connection = connection;
+        command.CommandText = "DELETE FROM tbl_regions WHERE Id = @id";
+
+        try
+        {
+            command.Parameters.Add(Provider.SetParameter("@id", id));
+
+            connection.Open();
+            using var transaction = connection.BeginTransaction();
+            try
+            {
+                command.Transaction = transaction;
+
+                var result = command.ExecuteNonQuery();
+
+                transaction.Commit();
+                connection.Close();
+
+                return result > 0 ? "Delete Success" : "Delete Failed";
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return $"Error Transaction: {ex.Message}";
+            }
+        }
+        catch (Exception ex)
+        {
+            return $"Error: {ex.Message}";
+        }
     }
 }
