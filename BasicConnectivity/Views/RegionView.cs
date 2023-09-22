@@ -25,4 +25,31 @@ public class RegionView : GeneralView
             Name = name
         };
     }
+
+    public int GetRegionIdToDelete()
+    {
+        Console.WriteLine("Enter the ID of the region to delete:");
+        if (int.TryParse(Console.ReadLine(), out int id))
+        {
+            return id;
+        }
+        return -1;
+    }
+
+    public int GetRegionIdToRetrieve()
+    {
+        Console.WriteLine("Enter the ID of the region to retrieve:");
+        if (int.TryParse(Console.ReadLine(), out int id))
+        {
+            return id;
+        }
+        return -1;
+    }
+
+    public void DisplayRegion(Region region)
+    {
+        Console.WriteLine($"Region ID: {region.Id}");
+        Console.WriteLine($"Region Name: {region.Name}");
+    }
+
 }

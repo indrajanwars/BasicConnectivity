@@ -27,6 +27,29 @@ public class RegionController
         }
     }
 
+    public void GetRegionById()
+    {
+        var id = _regionView.GetRegionIdToRetrieve();
+        if (id > 0)
+        {
+            var result = _region.GetById(id);
+            if (result.Id > 0)
+            {
+                var regionView = new RegionView();
+                regionView.DisplayRegion(result);
+            }
+            else
+            {
+                Console.WriteLine($"Region with ID {id} not found.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid region ID");
+        }
+    }
+
+
     public void Insert()
     {
         string input = "";
@@ -83,4 +106,19 @@ public class RegionController
         var result = _region.Update(region);
         RegionView.Transaction(result);
     }
+
+    public void Delete()
+    {
+        var id = _regionView.GetRegionIdToDelete();
+        if (id > 0)
+        {
+            var result = _region.Delete(id);
+            RegionView.Transaction(result);
+        }
+        else
+        {
+            Console.WriteLine("Invalid region ID");
+        }
+    }
+
 }
