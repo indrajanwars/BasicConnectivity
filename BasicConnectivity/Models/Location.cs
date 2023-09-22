@@ -1,4 +1,4 @@
-﻿namespace BasicConnectivity;
+﻿namespace BasicConnectivity.Models;
 
 public class Location
 {

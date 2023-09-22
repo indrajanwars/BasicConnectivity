@@ -1,4 +1,4 @@
-﻿namespace BasicConnectivity;
+﻿namespace BasicConnectivity.ViewModels;
 public class RegionAndCountry
 {
     public int CountryId { get; set; }

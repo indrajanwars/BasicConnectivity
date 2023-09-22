@@ -1,6 +1,6 @@
-﻿namespace BasicConnectivity;
+﻿namespace BasicConnectivity.Views;
 
-public class GeneralMenu
+public class GeneralView
 {
     public static void List<T>(List<T> items, string title)
     {

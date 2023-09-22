@@ -1,6 +1,8 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
-using System.Numerics;
+using BasicConnectivity.Controllers;
+using BasicConnectivity.Views;
+using BasicConnectivity.Models;
+using BasicConnectivity.ViewModels;
 
 namespace BasicConnectivity;
 
@@ -13,7 +15,7 @@ public class Program
         {
             Console.Clear();
             Console.WriteLine("== Menu Utama ==");
-            Console.WriteLine("1. Manage Table Region");
+            Console.WriteLine("1. CRUD Table Region");
             Console.WriteLine("2. List All Countries");
             Console.WriteLine("3. List All Locations");
             Console.WriteLine("4. List All Department");
@@ -43,44 +45,44 @@ public class Program
                 Console.Clear();
                 var country = new Country();
                 var tbl_countries = country.GetAll();
-                GeneralMenu.List(tbl_countries, "countries");
+                //GeneralView.List(tbl_countries, "countries");
                 break;
             case "3":
                 Console.Clear();
                 var location = new Location();
                 var tbl_locations = location.GetAll();
-                GeneralMenu.List(tbl_locations, "locations");
+                //GeneralView.List(tbl_locations, "locations");
                 break;
             case "4":
                 Console.Clear();
                 var department = new Department();
                 var tbl_departments = department.GetAll();
-                GeneralMenu.List(tbl_departments, "departments");
+                //GeneralView.List(tbl_departments, "departments");
                 break;
             case "5":
                 Console.Clear();
                 var employee = new Employee();
                 var tbl_employees = employee.GetAll();
-                GeneralMenu.List(tbl_employees, "employees");
+                //GeneralView.List(tbl_employees, "employees");
                 break;
             case "6":
                 Console.Clear();
                 var jobHistory = new JobHistory();
                 var tbl_jobHistory = jobHistory.GetAll();
-                GeneralMenu.List(tbl_jobHistory, "job history");
+                //GeneralView.List(tbl_jobHistory, "job history");
                 break;
             case "7":
                 Console.Clear();
                 var job = new Job();
                 var tbl_jobs = job.GetAll();
-                GeneralMenu.List(tbl_jobs, "jobs");
+                //GeneralView.List(tbl_jobs, "jobs");
                 break;
             case "8":
                 Console.Write("\nInput region: ");
                 string input2 = Console.ReadLine();
                 var region2 = new Region();
                 var result = region2.GetAll().Where(r => r.Name.Contains(input2)).ToList();
-                GeneralMenu.List(result, "regions");
+                //GeneralView.List(result, "regions");
                 break;
             case "9":
                 Console.Clear();
@@ -125,7 +127,7 @@ public class Program
                     Console.WriteLine($"{item.Id} - {item.NameRegion} - {item.NameCountry} - {item.RegionId}");
                 }*/
 
-                GeneralMenu.List(resultJoin2, "Regions - Countries - Locations");
+                //GeneralView.List(resultJoin2, "Regions - Countries - Locations");
                 break;
             case "10":
                 Console.Clear();
@@ -188,7 +190,7 @@ public class Program
                                             Region_Name = r.Name
                                         }).ToList();
 
-                GeneralMenu.List(resultJoin4, "Employee Details:\nID - Full Name - Email - Phone Number - Salary - Department Name - Street Address - Country Name - Region Name");
+                //GeneralView.List(resultJoin4, "Employee Details:\nID - Full Name - Email - Phone Number - Salary - Department Name - Street Address - Country Name - Region Name");
                 break;
             case "11":
                 Console.Clear();
@@ -210,7 +212,7 @@ public class Program
                                           AverageSalary = employeeGroup.Average(e => e.Salary)
                                       };
 
-                GeneralMenu.List(departmentStats.ToList(), "Department Statistics");
+                //GeneralView.List(departmentStats.ToList(), "Department Statistics");
                 break;
             case "12":
                 Console.WriteLine("\nExit Program..");
@@ -219,15 +221,19 @@ public class Program
                 Console.WriteLine("Invalid choice");
                 break;
         }
+
         return true;
     }
 
     public static void RegionMenu()
     {
         var region = new Region();
-        var regionChoice = true;
+        var regionView = new RegionView();
 
-        while (regionChoice)
+        var regionController = new RegionController(region, regionView);
+
+        var isLoop = true;
+        while (isLoop)
         {
             Console.Clear();
             Console.WriteLine("== Manage Table Region ==");
@@ -243,83 +249,86 @@ public class Program
             switch (input)
             {
                 case "1":
-                    var tbl_regions = region.GetAll();
-                    GeneralMenu.List(tbl_regions, "regions");
+                    //var tbl_regions = region.GetAll();
+                    //GeneralView.List(tbl_regions, "regions");
+                    regionController.GetAll();
                     break;
                 case "2":
-                    Console.Write("Enter ID: ");
-                    if (int.TryParse(Console.ReadLine(), out int regionId))
-                    {
-                        var singleRegion = region.GetById(regionId);
-                        if (singleRegion != null)
-                        {
-                            Console.WriteLine(singleRegion.ToString());
-                        }
-                        else
-                        {
-                            Console.WriteLine("Region not found");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid input");
-                    }
+                    //Console.Write("Enter ID: ");
+                    //if (int.TryParse(Console.ReadLine(), out int regionId))
+                    //{
+                    //    var singleRegion = region.GetById(regionId);
+                    //    if (singleRegion != null)
+                    //    {
+                    //        Console.WriteLine(singleRegion.ToString());
+                    //    }
+                    //    else
+                    //    {
+                    //        Console.WriteLine("Region not found");
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("Invalid input");
+                    //}
+                    //regionController.GetById();
                     break;
                 case "3":
-                    Console.Write("Enter Region Name: ");
-                    string regionName = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(regionName))
-                    {
-                        var insertResult = region.Insert(new Region { Name = regionName });
-                        Console.WriteLine(insertResult);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Region Name cannot be empty");
-                    }
+                    //Console.Write("Enter Region Name: ");
+                    //string regionName = Console.ReadLine();
+                    //if (!string.IsNullOrEmpty(regionName))
+                    //{
+                    //    var insertResult = region.Insert(new Region { Name = regionName });
+                    //    Console.WriteLine(insertResult);
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("Region Name cannot be empty");
+                    //}
+                    regionController.Insert();
                     break;
                 case "4":
-                    Console.Write("Enter Region ID: ");
-                    if (int.TryParse(Console.ReadLine(), out int updateId))
-                    {
-                        Console.Write("Enter New Region Name: ");
-                        string newName = Console.ReadLine();
-                        if (!string.IsNullOrEmpty(newName))
-                        {
-                            var updateResult = region.Update(new Region { Id = updateId, Name = newName });
-                            Console.WriteLine(updateResult);
-                        }
-                        else
-                        {
-                            Console.WriteLine("New Region Name cannot be empty");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid input");
-                    }
+                    //Console.Write("Enter Region ID: ");
+                    //if (int.TryParse(Console.ReadLine(), out int updateId))
+                    //{
+                    //    Console.Write("Enter New Region Name: ");
+                    //    string newName = Console.ReadLine();
+                    //    if (!string.IsNullOrEmpty(newName))
+                    //    {
+                    //        var updateResult = region.Update(new Region { Id = updateId, Name = newName });
+                    //        Console.WriteLine(updateResult);
+                    //    }
+                    //    else
+                    //    {
+                    //        Console.WriteLine("New Region Name cannot be empty");
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("Invalid input");
+                    //}
+                    regionController.Update();
                     break;
                 case "5":
-                    Console.Write("Enter Region ID to delete: ");
-                    if (int.TryParse(Console.ReadLine(), out int deleteId))
-                    {
-                        var deleteResult = region.Delete(deleteId);
-                        Console.WriteLine(deleteResult);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid input");
-                    }
+                    //Console.Write("Enter Region ID to delete: ");
+                    //if (int.TryParse(Console.ReadLine(), out int deleteId))
+                    //{
+                    //    var deleteResult = region.Delete(deleteId);
+                    //    Console.WriteLine(deleteResult);
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("Invalid input");
+                    //}
+                    //regionController.Delete();
                     break;
                 case "6":
-                    regionChoice = false;
+                    isLoop = false;
                     break;
                 default:
                     Console.WriteLine("Invalid choice");
                     break;
             }
-
-            Console.ReadLine();
         }
     }
 }

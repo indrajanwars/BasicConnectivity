@@ -1,4 +1,4 @@
-﻿namespace BasicConnectivity;
+﻿namespace BasicConnectivity.ViewModels;
 public class EmployeeData
 {
     public int Id { get; set; }

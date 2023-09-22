@@ -1,25 +1,26 @@
-﻿namespace BasicConnectivity;
+﻿namespace BasicConnectivity.Models;
 
-public class Country
+public class Department
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public int RegionId { get; set; }
+    public int ManagerId { get; set; }
+    public int LocationId { get; set; }
 
     public override string ToString()
     {
-        return $"{Id} - {Name} - {RegionId}";
+        return $"{Id} - {Name} - {ManagerId} - {LocationId}";
     }
 
-    public List<Country> GetAll()
+    public List<Department> GetAll()
     {
-        var tbl_countries = new List<Country>();
+        var tbl_departments = new List<Department>();
 
         using var connection = Provider.GetConnection();
         using var command = Provider.GetCommand();
 
         command.Connection = connection;
-        command.CommandText = "SELECT * FROM tbl_countries";
+        command.CommandText = "SELECT * FROM tbl_departments";
 
         try
         {
@@ -31,17 +32,18 @@ public class Country
             {
                 while (reader.Read())
                 {
-                    tbl_countries.Add(new Country()
+                    tbl_departments.Add(new Department()
                     {
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
-                        RegionId = reader.GetInt32(2)
+                        ManagerId = reader.GetInt32(2),
+                        LocationId = reader.GetInt32(3)
                     });
                 }
                 reader.Close();
                 connection.Close();
 
-                return tbl_countries;
+                return tbl_departments;
             }
             reader.Close();
             connection.Close();
@@ -51,6 +53,6 @@ public class Country
             Console.WriteLine($"Error: {ex.Message}");
         }
 
-        return new List<Country>();
+        return new List<Department>();
     }
 }

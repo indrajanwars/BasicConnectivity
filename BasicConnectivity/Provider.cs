@@ -4,7 +4,7 @@ namespace BasicConnectivity;
 
 public class Provider
 {
-    private static readonly string connectionString = "Data Source=DESKTOP-MQGRL05;Integrated Security=True;Database=DB_HR;Connect Timeout=30;";
+    private static readonly string connectionString = "Data Source=RAVEN;Integrated Security=True;Database=DB_HR;Connect Timeout=30;";
 
     public static SqlConnection GetConnection()
     {
